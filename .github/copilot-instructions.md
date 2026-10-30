@@ -1,12 +1,26 @@
-# Instruções do Copilot --- Passagem de Serviço ABM
+# Instruções do Copilot --- Portal ABM
 
 ## Contexto obrigatório
 
 Leia `README.md` e os documentos em `docs/` antes de propor alterações
-relevantes. O Next.js atual é somente o scaffold inicial; as
-funcionalidades do protótipo HTML ainda não foram migradas para ele. O
-protótipo v0.6 é uma referência funcional, não uma implementação de
-produção.
+relevantes. O projeto Next.js já tem a página inicial do Portal ABM,
+navegação compartilhada, o início do fluxo de Passagem de Serviço
+(Dados Gerais, Viaturas, Abastecimentos, Alterações e providências
+temporárias, além de uma conferência demonstrativa) e a
+tela demonstrativa do QIS em `/qis`, com rascunhos e versões salvos
+localmente. A rota
+`/escalas` apresenta calendário mensal e designações demonstrativas no
+armazenamento local; a data inicial da passagem usa a designação como
+uma sugestão editável. A rota `/avisos` oferece mural local demonstrativo
+com publicação, pesquisa e filtros; anexos não são enviados ou
+armazenados. As alternâncias de perfil do QIS e das Escalas são
+simulações e não protegem ações administrativas. Não há programação
+oficial, integração de PDFs ou banco de dados. Outras funcionalidades
+do protótipo ainda não foram migradas. O protótipo HTML v0.8 é a referência
+visual e organizacional atual do portal; o v0.6 segue como referência
+funcional da Passagem. A conferência permite concluir apenas a
+demonstração local, sem persistir os dados; a finalização oficial não foi
+implementada. Protótipos não são implementação de produção.
 
 ## Como trabalhar com o usuário
 
@@ -50,6 +64,24 @@ produção.
     RLS.
 -   Não use `localStorage` como banco definitivo de passagens, pessoas,
     abastecimentos ou comprovantes.
+
+## Contexto do Portal
+
+-   Existem somente dois perfis de acesso: `Usuário da ABM` e
+    `Administrador`. Oficial, Auxiliar, Condutor e responsável pelo
+    abastecimento são participantes registrados, não perfis de login.
+-   Todo campo que identifica Oficial, militar, autor ou responsável deve
+    sugerir nomes do cadastro mestre de militares. Filtre as opções pela
+    função do campo quando necessário e preserve snapshots históricos;
+    texto livre de Oficial externo só é permitido no campo de Oficial de
+    Dia da Passagem.
+-   Qualquer usuário pode publicar avisos e determinações oficiais.
+-   Não apresente módulos marcados como “Em breve” como funcionalidades
+    implementadas nem invente indicadores operacionais.
+-   PostgreSQL/Supabase são possibilidades de desenvolvimento; não
+    configure banco, autenticação ou serviços externos sem decisão do
+    usuário.
+-   Use somente dados fictícios até que haja autorização institucional.
 
 ## Regras de negócio que devem ser preservadas
 

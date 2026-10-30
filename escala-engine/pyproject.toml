@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "abm-schedule-engine"
+version = "0.1.0"
+description = "Motor de otimização de escalas de serviço da ABM"
+requires-python = ">=3.10"
+dependencies = [
+    "ortools>=9.12,<10",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8,<9",
+]
+
+[project.scripts]
+abm-schedule = "abm_schedule_engine.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

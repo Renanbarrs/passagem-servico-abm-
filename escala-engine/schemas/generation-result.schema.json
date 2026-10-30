@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://abm.invalid/schemas/generation-result.schema.json",
+  "title": "Resultado da geração de escala da ABM",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "period",
+    "days",
+    "fairness",
+    "objective",
+    "diagnostics",
+    "warnings",
+    "solver"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "status": {
+      "enum": [
+        "OPTIMAL",
+        "FEASIBLE",
+        "INFEASIBLE",
+        "UNKNOWN",
+        "MODEL_INVALID"
+      ]
+    },
+    "period": {
+      "type": "object",
+      "required": ["start_date", "end_date"],
+      "properties": {
+        "start_date": { "type": "string", "format": "date" },
+        "end_date": { "type": "string", "format": "date" }
+      }
+    },
+    "days": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "date",
+          "auxiliary",
+          "driver",
+          "officer_of_day"
+        ],
+        "properties": {
+          "date": { "type": "string", "format": "date" },
+          "auxiliary": { "$ref": "#/$defs/assignment" },
+          "driver": { "$ref": "#/$defs/assignment" },
+          "officer_of_day": {
+            "type": ["null", "object"],
+            "description": "Permanece null; o Oficial de Dia é selecionado manualmente no Portal."
+          }
+        }
+      }
+    },
+    "fairness": { "type": "array", "items": { "type": "object" } },
+    "objective": {
+      "type": ["null", "object"],
+      "description": "J_total, J_funções e soma ponderada exata, expressos como frações."
+    },
+    "diagnostics": { "type": "array", "items": { "type": "string" } },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "solver": { "type": "object" }
+  },
+  "$defs": {
+    "assignment": {
+      "type": ["null", "object"],
+      "required": ["member_id", "name"],
+      "properties": {
+        "member_id": { "type": "string" },
+        "name": { "type": "string" }
+      }
+    }
+  }
+}

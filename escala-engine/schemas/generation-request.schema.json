@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://abm.invalid/schemas/generation-request.schema.json",
+  "title": "Solicitação de geração de escala da ABM",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "period",
+    "members",
+    "unavailabilities",
+    "fairness_baseline",
+    "historical_services"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "period": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start_date", "end_date"],
+      "properties": {
+        "start_date": { "$ref": "#/$defs/date" },
+        "end_date": { "$ref": "#/$defs/date" }
+      }
+    },
+    "members": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/member" },
+      "minItems": 1
+    },
+    "unavailabilities": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/unavailability" }
+    },
+    "fairness_baseline": {
+      "type": "object",
+      "description": "Expectativas acumuladas até o início do período, calculadas a partir de oportunidades históricas.",
+      "additionalProperties": { "$ref": "#/$defs/fairness" }
+    },
+    "historical_services": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/historical_service" }
+    }
+  },
+  "$defs": {
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "role": {
+      "enum": ["auxiliary", "driver"]
+    },
+    "fraction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["numerator", "denominator"],
+      "properties": {
+        "numerator": { "type": "integer", "minimum": 0 },
+        "denominator": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "member": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "active",
+        "can_auxiliary",
+        "can_driver",
+        "entry_date"
+      ],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "active": { "type": "boolean" },
+        "can_auxiliary": { "type": "boolean" },
+        "can_driver": { "type": "boolean" },
+        "entry_date": { "$ref": "#/$defs/date" }
+      }
+    },
+    "unavailability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["member_id", "start_date", "end_date", "kind", "notes"],
+      "properties": {
+        "member_id": { "type": "string", "minLength": 1 },
+        "start_date": { "$ref": "#/$defs/date" },
+        "end_date": { "$ref": "#/$defs/date" },
+        "kind": {
+          "enum": ["vacation", "leave", "absence", "course", "manual", "other"]
+        },
+        "notes": { "type": "string" }
+      }
+    },
+    "fairness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["expected_total", "expected_auxiliary", "expected_driver"],
+      "properties": {
+        "expected_total": { "$ref": "#/$defs/fraction" },
+        "expected_auxiliary": { "$ref": "#/$defs/fraction" },
+        "expected_driver": { "$ref": "#/$defs/fraction" }
+      }
+    },
+    "credit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["date", "role", "member_id"],
+      "properties": {
+        "date": { "$ref": "#/$defs/date" },
+        "role": { "$ref": "#/$defs/role" },
+        "member_id": { "type": "string", "minLength": 1 }
+      }
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["date", "role", "member_id"],
+      "properties": {
+        "date": { "$ref": "#/$defs/date" },
+        "role": { "$ref": "#/$defs/role" },
+        "member_id": { "type": "string", "minLength": 1 }
+      }
+    },
+    "historical_service": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["credit", "actual"],
+      "properties": {
+        "credit": { "$ref": "#/$defs/credit" },
+        "actual": { "$ref": "#/$defs/execution" }
+      }
+    }
+  }
+}

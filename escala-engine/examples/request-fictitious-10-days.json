@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "period": {
+    "start_date": "2026-10-01",
+    "end_date": "2026-10-10"
+  },
+  "members": [
+    {
+      "id": "member-01",
+      "name": "MILITAR FICTÍCIO 01",
+      "active": true,
+      "can_auxiliary": true,
+      "can_driver": true,
+      "entry_date": "2026-01-01"
+    },
+    {
+      "id": "member-02",
+      "name": "MILITAR FICTÍCIO 02",
+      "active": true,
+      "can_auxiliary": true,
+      "can_driver": true,
+      "entry_date": "2026-01-01"
+    },
+    {
+      "id": "member-03",
+      "name": "MILITAR FICTÍCIO 03",
+      "active": true,
+      "can_auxiliary": true,
+      "can_driver": true,
+      "entry_date": "2026-01-01"
+    },
+    {
+      "id": "member-04",
+      "name": "MILITAR FICTÍCIO 04",
+      "active": true,
+      "can_auxiliary": true,
+      "can_driver": true,
+      "entry_date": "2026-01-01"
+    },
+    {
+      "id": "member-05",
+      "name": "MILITAR FICTÍCIO 05",
+      "active": true,
+      "can_auxiliary": true,
+      "can_driver": true,
+      "entry_date": "2026-01-01"
+    },
+    {
+      "id": "member-06",
+      "name": "MILITAR FICTÍCIO 06",
+      "active": true,
+      "can_auxiliary": true,
+      "can_driver": true,
+      "entry_date": "2026-01-01"
+    },
+    {
+      "id": "member-07",
+      "name": "MILITAR FICTÍCIO 07",
+      "active": true,
+      "can_auxiliary": true,
+      "can_driver": false,
+      "entry_date": "2026-01-01"
+    },
+    {
+      "id": "member-08",
+      "name": "MILITAR FICTÍCIO 08",
+      "active": true,
+      "can_auxiliary": true,
+      "can_driver": false,
+      "entry_date": "2026-01-01"
+    }
+  ],
+  "unavailabilities": [
+    {
+      "member_id": "member-08",
+      "start_date": "2026-10-05",
+      "end_date": "2026-10-07",
+      "kind": "course",
+      "notes": "Curso fictício"
+    }
+  ],
+  "fairness_baseline": {
+    "member-01": {
+      "expected_total": { "numerator": 10, "denominator": 3 },
+      "expected_auxiliary": { "numerator": 5, "denominator": 2 },
+      "expected_driver": { "numerator": 5, "denominator": 3 }
+    },
+    "member-02": {
+      "expected_total": { "numerator": 10, "denominator": 3 },
+      "expected_auxiliary": { "numerator": 5, "denominator": 2 },
+      "expected_driver": { "numerator": 5, "denominator": 3 }
+    },
+    "member-03": {
+      "expected_total": { "numerator": 10, "denominator": 3 },
+      "expected_auxiliary": { "numerator": 5, "denominator": 2 },
+      "expected_driver": { "numerator": 5, "denominator": 3 }
+    },
+    "member-04": {
+      "expected_total": { "numerator": 10, "denominator": 3 },
+      "expected_auxiliary": { "numerator": 5, "denominator": 2 },
+      "expected_driver": { "numerator": 5, "denominator": 3 }
+    },
+    "member-05": {
+      "expected_total": { "numerator": 10, "denominator": 3 },
+      "expected_auxiliary": { "numerator": 5, "denominator": 2 },
+      "expected_driver": { "numerator": 5, "denominator": 3 }
+    },
+    "member-06": {
+      "expected_total": { "numerator": 10, "denominator": 3 },
+      "expected_auxiliary": { "numerator": 5, "denominator": 2 },
+      "expected_driver": { "numerator": 5, "denominator": 3 }
+    },
+    "member-07": {
+      "expected_total": { "numerator": 10, "denominator": 3 },
+      "expected_auxiliary": { "numerator": 5, "denominator": 2 },
+      "expected_driver": { "numerator": 0, "denominator": 1 }
+    },
+    "member-08": {
+      "expected_total": { "numerator": 10, "denominator": 3 },
+      "expected_auxiliary": { "numerator": 5, "denominator": 2 },
+      "expected_driver": { "numerator": 0, "denominator": 1 }
+    }
+  },
+  "historical_services": []
+}

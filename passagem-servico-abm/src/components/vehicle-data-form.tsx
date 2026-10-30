@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { parseNonNegativeSafeInteger } from "@/lib/passage/validation";
 
 export type VehicleStatus = "Operacional" | "Baixada";
 
@@ -57,15 +58,10 @@ const inputClassName =
 function getDistance(vehicle: VehicleData) {
   if (!vehicle.initialOdometer || !vehicle.finalOdometer) return null;
 
-  const initial = Number(vehicle.initialOdometer);
-  const final = Number(vehicle.finalOdometer);
+  const initial = parseNonNegativeSafeInteger(vehicle.initialOdometer);
+  const final = parseNonNegativeSafeInteger(vehicle.finalOdometer);
 
-  if (
-    !Number.isInteger(initial) ||
-    !Number.isInteger(final) ||
-    initial < 0 ||
-    final < initial
-  ) {
+  if (initial === null || final === null || final < initial) {
     return null;
   }
 

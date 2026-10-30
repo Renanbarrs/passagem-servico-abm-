@@ -1,33 +1,48 @@
 import type { ReactNode } from "react";
-import Image from "next/image";
 import Link from "next/link";
+import PortalShell from "@/components/portal/portal-shell";
 
-type ModuleIconName = "overview" | "new" | "vehicle" | "fuel" | "notes" | "history";
+type ModuleIconName =
+  | "overview"
+  | "new"
+  | "vehicle"
+  | "fuel"
+  | "notes"
+  | "history";
 
 const modules: {
   title: string;
   description: string;
   icon: Exclude<ModuleIconName, "overview" | "new">;
+  status: "Em desenvolvimento" | "Consulta demonstrativa" | "Disponível";
+  href?: string;
 }[] = [
   {
-    title: "Viaturas",
-    description: "Condição, hodômetros e nível do tanque",
+    title: "QIS",
+    description: "Consulta da rotina semanal diretamente no portal",
     icon: "vehicle",
+    status: "Consulta demonstrativa",
+    href: "/qis",
   },
   {
-    title: "Abastecimentos",
-    description: "Registros de combustível e comprovantes",
+    title: "Escalas de Serviço",
+    description: "Calendário mensal e designações por data",
     icon: "fuel",
+    status: "Consulta demonstrativa",
+    href: "/escalas",
   },
   {
-    title: "Alterações de serviço",
-    description: "Ocorrências e providências",
+    title: "Avisos e Determinações",
+    description: "Mural de publicações internas",
     icon: "notes",
+    status: "Consulta demonstrativa",
+    href: "/avisos",
   },
   {
-    title: "Histórico",
-    description: "Consulta de passagens e relatórios",
+    title: "Passagem de Serviço",
+    description: "Dados gerais, viaturas e abastecimentos",
     icon: "history",
+    status: "Disponível",
   },
 ];
 
@@ -88,185 +103,112 @@ function Icon({ name, className = "size-5" }: { name: ModuleIconName; className?
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#eef0f3] text-slate-900 lg:flex">
-      <aside className="flex shrink-0 flex-col bg-[#171316] text-slate-200 lg:min-h-screen lg:w-64">
-        <div className="flex items-center gap-3 border-b border-white/10 px-5 py-5">
+    <PortalShell>
+      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-8 sm:py-9">
+        <section
+          aria-labelledby="welcome-title"
+          className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8"
+        >
           <div
-            className="grid size-11 shrink-0 place-items-center overflow-hidden rounded-xl bg-white p-0.5 shadow-md shadow-black/20"
-          >
-            <Image
-              alt="Brasão da Academia de Bombeiro Militar"
-              className="h-full w-full object-contain"
-              height={910}
-              priority
-              src="/abm-logo.png"
-              width={768}
-            />
+            aria-hidden="true"
+            className="absolute inset-y-0 left-0 w-1.5 bg-[#356cf0]"
+          />
+          <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+            <div className="max-w-2xl">
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#356cf0]">
+                Portal institucional
+              </p>
+              <h1
+                className="mt-2 text-2xl font-bold tracking-tight text-[#17233a] sm:text-3xl"
+                id="welcome-title"
+              >
+                Bem-vindo ao Portal ABM
+              </h1>
+              <p className="mt-3 text-sm leading-6 text-slate-600 sm:text-base">
+                Acesse a Passagem de Serviço e acompanhe os módulos internos
+                que serão reunidos neste portal.
+              </p>
+            </div>
+            <div className="shrink-0">
+              <Link
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#356cf0] px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#245bde] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+                href="/nova-passagem"
+              >
+                <Icon name="new" />
+                Nova passagem de serviço
+              </Link>
+              <p className="mt-2 text-center text-xs text-slate-500">
+                Dados temporários · sem salvamento
+              </p>
+            </div>
           </div>
-          <div>
-            <p className="text-xs font-black tracking-wider text-white uppercase leading-tight">
-              PASSAGEM<br />DE SERVIÇO
-            </p>
-            <p className="text-[10px] font-medium tracking-wider text-white/70">
-              ACADEMIA BOMBEIRO MILITAR
-            </p>
-          </div>
-        </div>
+        </section>
 
-        <div className="px-4 py-5">
-          <p className="px-3 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">
-            Geral
-          </p>
-          <div
-            aria-current="page"
-            className="mt-2 flex items-center gap-3 rounded-xl border-l-2 border-[#d52932] bg-[#3a2025] px-3 py-3 text-sm font-semibold text-white"
-          >
-            <Icon className="size-4.5 text-[#f08a8e]" name="overview" />
-            Visão geral
+        <section aria-labelledby="modules-title" className="mt-8">
+          <div className="mb-4">
+            <h2
+              className="text-lg font-bold tracking-tight text-[#17233a]"
+              id="modules-title"
+            >
+              Módulos do portal
+            </h2>
+            <p className="mt-1 text-sm text-slate-600">
+              QIS, Escalas e o mural estão disponíveis em demonstrações
+              locais; os demais módulos serão construídos em etapas.
+            </p>
           </div>
-        </div>
 
-        <nav aria-label="Módulos do sistema" className="px-4 pb-5">
-          <p className="px-3 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">
-            Módulos
-          </p>
-          <ul className="mt-2 space-y-1">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {modules.map((module) => (
-              <li
-                className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm text-slate-400"
+              <article
+                className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
                 key={module.title}
               >
-                <Icon className="size-4.5 text-slate-500" name={module.icon} />
-                <span className="min-w-0 flex-1">{module.title}</span>
-                <span className="rounded-full bg-white/5 px-2 py-1 text-[9px] font-semibold text-slate-500">
-                  Em breve
-                </span>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        <div className="mt-auto hidden px-5 pb-5 lg:block">
-          <div className="rounded-2xl border border-white/10 bg-white/4 p-4">
-            <p className="text-xs font-semibold text-slate-200">
-              Ambiente de desenvolvimento
-            </p>
-            <p className="mt-1.5 text-xs leading-5 text-slate-400">
-              Use somente dados fictícios nesta etapa.
-            </p>
-          </div>
-        </div>
-      </aside>
-
-      <div className="min-w-0 flex-1">
-        <header className="border-t-2 border-[#c8212b] bg-white shadow-sm">
-          <div className="flex min-h-16 items-center justify-between gap-4 px-5 sm:px-8">
-            <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.19em] text-slate-500">
-                ABM · Sistema interno
-              </p>
-              <p className="mt-1 text-sm font-bold text-slate-800">
-                Painel inicial
-              </p>
-            </div>
-            <span className="rounded-full border border-[#f1c8ca] bg-[#fff5f5] px-3 py-1.5 text-[11px] font-semibold text-[#a91f28]">
-              Protótipo em desenvolvimento
-            </span>
-          </div>
-        </header>
-
-        <div className="mx-auto max-w-7xl px-5 py-7 sm:px-8 sm:py-9">
-          <section
-            aria-labelledby="welcome-title"
-            className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8"
-          >
-            <div
-              aria-hidden="true"
-              className="absolute inset-y-0 left-0 w-1.5 bg-[#c8212b]"
-            />
-            <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-              <div className="max-w-2xl">
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#b31e27]">
-                  Controle de serviço
-                </p>
-                <h1
-                  className="mt-2 text-2xl font-bold tracking-tight text-[#252126] sm:text-3xl"
-                  id="welcome-title"
-                >
-                  Passagem de Serviço
-                </h1>
-                <p className="mt-3 text-sm leading-6 text-slate-600 sm:text-base">
-                  Bem-vindo ao painel da ABM. Aqui ficarão reunidos os registros
-                  e informações da passagem diária de serviço.
-                </p>
-              </div>
-              <div className="shrink-0">
-                <Link
-                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#b82029] px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#991b23] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#b82029]"
-                  href="/nova-passagem"
-                >
-                  <Icon name="new" />
-                  Nova passagem de serviço
-                </Link>
-                <p
-                  className="mt-2 text-center text-xs text-slate-500"
-                >
-                  Primeira etapa disponível · sem gravação
-                </p>
-              </div>
-            </div>
-          </section>
-
-          <section aria-labelledby="modules-title" className="mt-8">
-            <div className="mb-4 flex flex-wrap items-end justify-between gap-2">
-              <div>
-                <h2
-                  className="text-lg font-bold tracking-tight text-[#252126]"
-                  id="modules-title"
-                >
-                  Módulos do sistema
-                </h2>
-                <p className="mt-1 text-sm text-slate-600">
-                  Áreas previstas para as próximas etapas do projeto.
-                </p>
-              </div>
-              <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">
-                4 módulos planejados
-              </span>
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-              {modules.map((module) => (
-                <article
-                  className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md"
-                  key={module.title}
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="grid size-11 place-items-center rounded-xl bg-[#f9e9ea] text-[#b82029]">
-                      <Icon className="size-5" name={module.icon} />
-                    </div>
-                    <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-semibold text-slate-500">
-                      Em breve
-                    </span>
+                <div className="flex items-start justify-between gap-3">
+                  <div className="grid size-11 place-items-center rounded-xl bg-blue-50 text-[#356cf0]">
+                    <Icon className="size-5" name={module.icon} />
                   </div>
-                  <h3 className="mt-4 font-bold text-slate-900">
-                    {module.title}
-                  </h3>
-                  <p className="mt-1 min-h-10 text-sm leading-5 text-slate-600">
-                    {module.description}
-                  </p>
-                </article>
-              ))}
-            </div>
-          </section>
+                  <span
+                    className={`rounded-full px-2.5 py-1 text-[10px] font-semibold ${
+                      module.status !== "Em desenvolvimento"
+                        ? "bg-emerald-50 text-emerald-800"
+                        : "bg-slate-100 text-slate-500"
+                    }`}
+                  >
+                    {module.status}
+                  </span>
+                </div>
+                <h3 className="mt-4 font-bold text-slate-900">
+                  {module.title}
+                </h3>
+                <p className="mt-1 min-h-10 text-sm leading-5 text-slate-600">
+                  {module.description}
+                </p>
+                {module.href || module.status === "Disponível" ? (
+                  <Link
+                    className="mt-4 inline-flex min-h-10 items-center rounded-lg border border-slate-200 px-3 text-xs font-semibold text-[#245bde] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+                    href={module.href ?? "/nova-passagem"}
+                  >
+                    {module.title === "QIS"
+                      ? "Consultar QIS"
+                      : module.title === "Escalas de Serviço"
+                        ? "Abrir calendário"
+                        : module.title === "Avisos e Determinações"
+                          ? "Abrir mural"
+                          : "Abrir módulo"}
+                  </Link>
+                ) : null}
+              </article>
+            ))}
+          </div>
+        </section>
 
-          <footer className="mt-8 rounded-2xl border border-slate-200 bg-white/70 px-5 py-4 text-xs leading-5 text-slate-500">
-            A etapa Dados gerais permite validar o formulário localmente. Os
-            demais módulos ainda estão em desenvolvimento e nenhum dado de
-            serviço é armazenado.
-          </footer>
-        </div>
+        <footer className="mt-8 rounded-2xl border border-blue-100 bg-blue-50 px-5 py-4 text-xs leading-5 text-blue-950">
+          Ambiente de demonstração: ainda não há banco de dados conectado.
+          Indicadores operacionais serão exibidos quando houver dados
+          disponíveis. Use somente informações fictícias.
+        </footer>
       </div>
-    </main>
+    </PortalShell>
   );
 }

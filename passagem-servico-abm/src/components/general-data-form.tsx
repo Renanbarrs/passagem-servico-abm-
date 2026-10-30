@@ -1,13 +1,18 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import ParticipantSearch from "@/components/participant-search";
 import {
   officerOptions,
   personnelOptions,
 } from "@/data/participant-options";
+import { LocalStorageDutyRosterRepository } from "@/lib/duty-rosters/repository";
+import {
+  isValidDateInput,
+  isValidTimeInput,
+} from "@/lib/passage/validation";
 
-type GeneralData = {
+export type GeneralData = {
   startDate: string;
   startTime: string;
   endDate: string;
@@ -24,7 +29,7 @@ type Errors = Partial<Record<keyof GeneralData, string>>;
 
 type GeneralDataFormProps = {
   onChange: () => void;
-  onContinue: () => void;
+  onContinue: (data: GeneralData) => void;
 };
 
 const inputClassName =
@@ -51,13 +56,27 @@ const initialData: GeneralData = {
   driverId: null,
 };
 
+const rosterRepository = new LocalStorageDutyRosterRepository();
+
 function validate(data: GeneralData): Errors {
   const errors: Errors = {};
 
   if (!data.startDate) errors.startDate = "Informe a data de início.";
+  else if (!isValidDateInput(data.startDate)) {
+    errors.startDate = "Informe uma data de início válida.";
+  }
   if (!data.startTime) errors.startTime = "Informe o horário de início.";
+  else if (!isValidTimeInput(data.startTime)) {
+    errors.startTime = "Informe um horário de início válido.";
+  }
   if (!data.endDate) errors.endDate = "Informe a data de término.";
+  else if (!isValidDateInput(data.endDate)) {
+    errors.endDate = "Informe uma data de término válida.";
+  }
   if (!data.endTime) errors.endTime = "Informe o horário de término.";
+  else if (!isValidTimeInput(data.endTime)) {
+    errors.endTime = "Informe um horário de término válido.";
+  }
   if (!data.officerName.trim()) errors.officerName = "Informe o Oficial de Dia.";
   if (!data.auxiliaryId) {
     errors.auxiliaryName = "Busque e selecione um Auxiliar de Dia.";
@@ -69,6 +88,10 @@ function validate(data: GeneralData): Errors {
     data.startTime &&
     data.endDate &&
     data.endTime &&
+    isValidDateInput(data.startDate) &&
+    isValidTimeInput(data.startTime) &&
+    isValidDateInput(data.endDate) &&
+    isValidTimeInput(data.endTime) &&
     (data.endDate < data.startDate ||
       (data.endDate === data.startDate && data.endTime < data.startTime))
   ) {
@@ -88,6 +111,71 @@ export default function GeneralDataForm({
   const [data, setData] = useState<GeneralData>(initialData);
   const [errors, setErrors] = useState<Errors>({});
   const [success, setSuccess] = useState(false);
+  const [rosterNotice, setRosterNotice] = useState("");
+  const [rosterError, setRosterError] = useState("");
+
+  useEffect(() => {
+    let active = true;
+
+    rosterRepository
+      .getByDate(data.startDate)
+      .then((roster) => {
+        if (!active) return;
+        setRosterError("");
+
+        if (!roster) {
+          setData((current) => ({
+            ...current,
+            officerName: "",
+            officerId: null,
+            auxiliaryName: "",
+            auxiliaryId: null,
+            driverName: "",
+            driverId: null,
+          }));
+          setRosterNotice(
+            "Não há escala cadastrada para a data inicial. Preencha os participantes manualmente; os campos continuam editáveis.",
+          );
+          return;
+        }
+
+        setData((current) => ({
+          ...current,
+          officerName: roster.officerName,
+          officerId:
+            officerOptions.find(
+              (option) => option.name === roster.officerName,
+            )?.id ?? null,
+          auxiliaryName: roster.auxiliaryName,
+          auxiliaryId:
+            personnelOptions.find(
+              (option) => option.name === roster.auxiliaryName,
+            )?.id ?? null,
+          driverName: roster.driverName,
+          driverId:
+            personnelOptions.find(
+              (option) => option.name === roster.driverName,
+            )?.id ?? null,
+        }));
+        setRosterNotice(
+          "Sugestões da escala para esta data. Revise e ajuste os campos, se necessário.",
+        );
+      })
+      .catch((cause: unknown) => {
+        if (active) {
+          setRosterError(
+            cause instanceof Error
+              ? cause.message
+              : "Não foi possível consultar a escala desta data.",
+          );
+          setRosterNotice("");
+        }
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [data.startDate]);
 
   function updateData(changes: Partial<GeneralData>) {
     setData((current) => ({ ...current, ...changes }));
@@ -103,7 +191,7 @@ export default function GeneralDataForm({
     const isValid = Object.keys(nextErrors).length === 0;
     setSuccess(isValid);
     if (isValid) {
-      onContinue();
+      onContinue(data);
     }
   }
 
@@ -214,6 +302,22 @@ export default function GeneralDataForm({
       </div>
 
       <div className="border-t border-slate-200 pt-6">
+        {rosterNotice ? (
+          <p
+            className="mb-4 rounded-lg border border-blue-100 bg-blue-50 px-3 py-2 text-xs leading-5 text-blue-900"
+            role="status"
+          >
+            {rosterNotice}
+          </p>
+        ) : null}
+        {rosterError ? (
+          <p
+            className="mb-4 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs leading-5 text-red-900"
+            role="alert"
+          >
+            {rosterError}
+          </p>
+        ) : null}
         <div className="grid gap-5">
           <ParticipantSearch
             error={errors.officerName}

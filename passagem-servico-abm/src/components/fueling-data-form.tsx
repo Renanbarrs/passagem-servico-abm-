@@ -4,6 +4,12 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import ParticipantSearch from "@/components/participant-search";
 import { personnelOptions } from "@/data/participant-options";
 import type { VehicleData, VehicleId } from "@/components/vehicle-data-form";
+import {
+  isDateTimeWithinPeriod,
+  isValidDateInput,
+  isValidTimeInput,
+  type ServicePeriod,
+} from "@/lib/passage/validation";
 
 type FuelingDraft = {
   id: number;
@@ -22,7 +28,7 @@ type FuelingDraft = {
 type FuelingField = Exclude<keyof FuelingDraft, "id" | "receiptName">;
 type FuelingErrors = Partial<Record<FuelingField | "receiptName", string>>;
 
-type ValidatedFueling = {
+export type ValidatedFueling = {
   id: number;
   vehicleId: VehicleId;
   date: string;
@@ -38,7 +44,10 @@ type ValidatedFueling = {
 
 type FuelingDataFormProps = {
   vehicleData: Record<VehicleId, VehicleData>;
+  servicePeriod: ServicePeriod | null;
   onBack: () => void;
+  onContinue: (fuelings: ValidatedFueling[]) => void;
+  onEdit: () => void;
 };
 
 const vehicles: { id: VehicleId; model: string }[] = [
@@ -103,12 +112,19 @@ function formatDate(value: string) {
 function validateFueling(
   fueling: FuelingDraft,
   vehicleData: Record<VehicleId, VehicleData>,
+  servicePeriod: ServicePeriod | null,
 ): { errors: FuelingErrors; normalized: ValidatedFueling | null } {
   const errors: FuelingErrors = {};
 
   if (!fueling.vehicleId) errors.vehicleId = "Selecione a viatura.";
   if (!fueling.date) errors.date = "Informe a data.";
+  else if (!isValidDateInput(fueling.date)) {
+    errors.date = "Informe uma data válida.";
+  }
   if (!fueling.time) errors.time = "Informe o horário.";
+  else if (!isValidTimeInput(fueling.time)) {
+    errors.time = "Informe um horário válido.";
+  }
   if (!fueling.responsible.trim()) {
     errors.responsible = "Busque e selecione um responsável da lista.";
   } else if (!fueling.responsibleId) {
@@ -166,6 +182,15 @@ function validateFueling(
   }
 
   if (
+    servicePeriod &&
+    isValidDateInput(fueling.date) &&
+    isValidTimeInput(fueling.time) &&
+    !isDateTimeWithinPeriod(fueling.date, fueling.time, servicePeriod)
+  ) {
+    errors.date = "O abastecimento deve ocorrer dentro do período do serviço.";
+  }
+
+  if (
     Object.keys(errors).length > 0 ||
     !fueling.vehicleId ||
     !fueling.responsibleId ||
@@ -197,13 +222,32 @@ function validateFueling(
 
 export default function FuelingDataForm({
   vehicleData,
+  servicePeriod,
   onBack,
+  onContinue,
+  onEdit,
 }: FuelingDataFormProps) {
   const nextId = useRef(1);
   const [draft, setDraft] = useState<FuelingDraft>(() => createFueling(0));
   const [fuelings, setFuelings] = useState<ValidatedFueling[]>([]);
   const [errors, setErrors] = useState<FuelingErrors>({});
   const [success, setSuccess] = useState(false);
+  const [entryError, setEntryError] = useState("");
+
+  function getInvalidSavedFueling() {
+    return fuelings.find((fueling) => {
+      const draftFueling: FuelingDraft = {
+        ...fueling,
+        odometer: String(fueling.odometer),
+        liters: String(fueling.liters),
+        amount: String(fueling.amount),
+        balance: String(fueling.balance),
+      };
+      return Object.keys(
+        validateFueling(draftFueling, vehicleData, servicePeriod).errors,
+      ).length > 0;
+    });
+  }
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -216,7 +260,8 @@ export default function FuelingDataForm({
   }, []);
 
   function addFueling() {
-    const result = validateFueling(draft, vehicleData);
+    onEdit();
+    const result = validateFueling(draft, vehicleData, servicePeriod);
     setErrors(result.errors);
     const normalized = result.normalized;
     if (!normalized) return;
@@ -224,22 +269,39 @@ export default function FuelingDataForm({
     setFuelings((current) => [...current, normalized]);
     setDraft(createFueling(nextId.current++, getTodayDate()));
     setErrors({});
+    setEntryError("");
     setSuccess(false);
   }
 
   function removeFueling(id: number) {
+    onEdit();
     setFuelings((current) => current.filter((fueling) => fueling.id !== id));
+    setEntryError("");
     setSuccess(false);
   }
 
   function updateDraft(changes: Partial<FuelingDraft>) {
+    onEdit();
     setDraft((current) => ({ ...current, ...changes }));
     setErrors({});
+    setEntryError("");
     setSuccess(false);
   }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    const invalidSavedFueling = getInvalidSavedFueling();
+    if (invalidSavedFueling) {
+      const fuelingNumber =
+        fuelings.findIndex((fueling) => fueling.id === invalidSavedFueling.id) +
+        1;
+      setEntryError(
+        `O abastecimento ${fuelingNumber} ficou incompatível com o período ou hodômetro atualizado da viatura. Revise ou remova esse lançamento.`,
+      );
+      setSuccess(false);
+      return;
+    }
 
     const hasDraftContent = Boolean(
       draft.vehicleId ||
@@ -252,16 +314,27 @@ export default function FuelingDataForm({
         draft.receiptName,
     );
     if (hasDraftContent) {
-      const result = validateFueling(draft, vehicleData);
-      if (!result.normalized) {
+      const result = validateFueling(draft, vehicleData, servicePeriod);
+      const normalized = result.normalized;
+      if (!normalized) {
         setErrors(result.errors);
         setSuccess(false);
         return;
       }
+
+      const nextFuelings = [...fuelings, normalized];
+      setFuelings(nextFuelings);
+      setDraft(createFueling(nextId.current++, getTodayDate()));
+      setErrors({});
+      setEntryError("");
+      setSuccess(true);
+      onContinue(nextFuelings);
+      return;
     }
 
     setErrors({});
     setSuccess(true);
+    onContinue(fuelings);
   }
 
   const fuelingErrors = errors;
@@ -283,6 +356,14 @@ export default function FuelingDataForm({
         lançamento validado aparecerá logo abaixo. Se não houver abastecimento,
         deixe a lista vazia.
       </div>
+      {entryError ? (
+        <p
+          className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800"
+          role="alert"
+        >
+          {entryError}
+        </p>
+      ) : null}
 
       <section
         aria-labelledby={`${prefix}-title`}
@@ -759,6 +840,7 @@ export default function FuelingDataForm({
           <button
             className="min-h-11 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#b82029]"
             onClick={() => {
+              onEdit();
               setFuelings([]);
               setDraft(createFueling(nextId.current++, getTodayDate()));
               setErrors({});

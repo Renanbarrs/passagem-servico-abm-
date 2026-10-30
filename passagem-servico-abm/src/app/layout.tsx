@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Passagem de Serviço | ABM",
-  description: "Sistema de passagem de serviço da Academia de Bombeiro Militar.",
+  title: "Portal ABM",
+  description: "Portal interno demonstrativo da Academia Bombeiro Militar.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

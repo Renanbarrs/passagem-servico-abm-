@@ -3,7 +3,7 @@ export type ParticipantOption = {
   name: string;
 };
 
-export const personnelOptions: ParticipantOption[] = [
+export const militaryOptions: ParticipantOption[] = [
   { id: "personnel-01", name: "SD FICTÍCIO ALFA" },
   { id: "personnel-02", name: "SD FICTÍCIO BRAVO" },
   { id: "personnel-03", name: "SD FICTÍCIO CHARLIE" },
@@ -20,9 +20,6 @@ export const personnelOptions: ParticipantOption[] = [
   { id: "personnel-14", name: "TEN FICTÍCIO BRAVO" },
   { id: "personnel-15", name: "TEN FICTÍCIO CHARLIE" },
   { id: "personnel-16", name: "TEN FICTÍCIO DELTA" },
-];
-
-export const officerOptions: ParticipantOption[] = [
   { id: "officer-01", name: "1º TEN FICTÍCIO ALFA" },
   { id: "officer-02", name: "1º TEN FICTÍCIO BRAVO" },
   { id: "officer-03", name: "1º TEN FICTÍCIO CHARLIE" },
@@ -30,3 +27,15 @@ export const officerOptions: ParticipantOption[] = [
   { id: "officer-05", name: "TCEL FICTÍCIO ALFA" },
   { id: "officer-06", name: "TCEL FICTÍCIO BRAVO" },
 ];
+
+export const personnelOptions = militaryOptions.filter((person) =>
+  person.id.startsWith("personnel-"),
+);
+
+export const officerOptions = militaryOptions.filter((person) =>
+  person.id.startsWith("officer-"),
+);
+
+export function isRegisteredMilitaryName(name: string) {
+  return militaryOptions.some((person) => person.name === name.trim());
+}

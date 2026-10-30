@@ -1,8 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import FuelingDataForm from "@/components/fueling-data-form";
-import GeneralDataForm from "@/components/general-data-form";
+import AlterationsDataForm, {
+  type ActionsBySector,
+  type AlterationsData,
+  type Occurrence,
+} from "@/components/alterations-data-form";
+import FuelingDataForm, {
+  type ValidatedFueling,
+} from "@/components/fueling-data-form";
+import GeneralDataForm, {
+  type GeneralData,
+} from "@/components/general-data-form";
+import PassageReview from "@/components/passage-review";
 import VehicleDataForm, {
   initialVehicleData,
   type VehicleData,
@@ -13,7 +23,7 @@ const steps = [
   "Dados gerais",
   "Viaturas",
   "Abastecimentos",
-  "Alterações",
+  "Alterações e providências",
   "Conferência",
 ];
 
@@ -22,6 +32,15 @@ export default function PassageWizard() {
   const [highestUnlockedStep, setHighestUnlockedStep] = useState(0);
   const [vehicleData, setVehicleData] =
     useState<Record<VehicleId, VehicleData>>(initialVehicleData);
+  const [generalData, setGeneralData] = useState<GeneralData | null>(null);
+  const [fuelings, setFuelings] = useState<ValidatedFueling[]>([]);
+  const [occurrences, setOccurrences] = useState<Occurrence[]>([]);
+  const [actionsBySector, setActionsBySector] = useState<ActionsBySector>({
+    Frota: "",
+    Patrimônio: "",
+    Pessoal: "",
+  });
+  const [demoFinalized, setDemoFinalized] = useState(false);
 
   function handleGeneralDataEdit() {
     if (highestUnlockedStep > 0) {
@@ -30,7 +49,8 @@ export default function PassageWizard() {
     }
   }
 
-  function handleGeneralDataContinue() {
+  function handleGeneralDataContinue(data: GeneralData) {
+    setGeneralData(data);
     setHighestUnlockedStep((unlocked) => Math.max(unlocked, 1));
     setCurrentStep(1);
   }
@@ -48,6 +68,27 @@ export default function PassageWizard() {
     setCurrentStep(2);
   }
 
+  function handleFuelingEdit() {
+    if (highestUnlockedStep > 2) {
+      setHighestUnlockedStep(2);
+      setCurrentStep(2);
+    }
+  }
+
+  function handleAlterationEdit() {
+    if (highestUnlockedStep > 3) {
+      setHighestUnlockedStep(3);
+      setCurrentStep(3);
+    }
+  }
+
+  function handleAlterationsContinue(data: AlterationsData) {
+    setOccurrences(data.occurrences);
+    setActionsBySector(data.actionsBySector);
+    setHighestUnlockedStep((unlocked) => Math.max(unlocked, 4));
+    setCurrentStep(4);
+  }
+
   return (
     <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
       <nav
@@ -58,7 +99,8 @@ export default function PassageWizard() {
           {steps.map((step, index) => {
             const isCurrent = index === currentStep;
             const isComplete = index < highestUnlockedStep;
-            const isAvailable = index <= highestUnlockedStep;
+            const isAvailable =
+              !demoFinalized && index <= highestUnlockedStep;
 
             return (
               <li
@@ -181,6 +223,78 @@ export default function PassageWizard() {
           </div>
           <FuelingDataForm
             onBack={() => setCurrentStep(1)}
+            onContinue={(data) => {
+              setFuelings(data);
+              setHighestUnlockedStep((unlocked) => Math.max(unlocked, 3));
+              setCurrentStep(3);
+            }}
+            onEdit={handleFuelingEdit}
+            servicePeriod={
+              generalData
+                ? {
+                    startDate: generalData.startDate,
+                    startTime: generalData.startTime,
+                    endDate: generalData.endDate,
+                    endTime: generalData.endTime,
+                  }
+                : null
+            }
+            vehicleData={vehicleData}
+          />
+        </section>
+
+        <section
+          aria-labelledby="alterations-step-title"
+          hidden={currentStep !== 3}
+        >
+          <div className="mb-5">
+            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#b31e27]">
+              Etapa 4 de 5
+            </p>
+            <h2
+              className="mt-1 text-lg font-bold text-[#252126]"
+              id="alterations-step-title"
+            >
+              Alterações do serviço
+            </h2>
+            <p className="mt-1 text-sm text-slate-600">
+              Registre ocorrências, confirme ausência de alterações e anote
+              providências por setor.
+            </p>
+          </div>
+          <AlterationsDataForm
+            onBack={() => setCurrentStep(2)}
+            onContinue={handleAlterationsContinue}
+            onEdit={handleAlterationEdit}
+          />
+        </section>
+
+        <section
+          aria-labelledby="review-step-title"
+          hidden={currentStep !== 4}
+        >
+          <div className="mb-5">
+            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#b31e27]">
+              Etapa 5 de 5
+            </p>
+            <h2
+              className="mt-1 text-lg font-bold text-[#252126]"
+              id="review-step-title"
+            >
+              Conferência da passagem
+            </h2>
+            <p className="mt-1 text-sm text-slate-600">
+              Revise os dados reunidos antes de uma futura finalização.
+            </p>
+          </div>
+          <PassageReview
+            actionsBySector={actionsBySector}
+            fuelings={fuelings}
+            generalData={generalData}
+            isFinalized={demoFinalized}
+            onFinalize={() => setDemoFinalized(true)}
+            occurrences={occurrences}
+            onEditStep={setCurrentStep}
             vehicleData={vehicleData}
           />
         </section>

@@ -1,0 +1,5 @@
+/escala-engine/.venv/
+/escala-engine/.pytest_cache/
+/escala-engine/.coverage
+/escala-engine/**/__pycache__/
+/escala-engine/**/*.py[cod]
