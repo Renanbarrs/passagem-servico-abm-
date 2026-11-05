@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "abm-fairness-poc"
+version = "0.1.0"
+description = "Prova de conceito independente para expectativas de escala"
+requires-python = ">=3.10,<3.15"
+dependencies = [
+    "ortools>=9.12,<10",
+    "cvxpy>=1.6,<2",
+    "clarabel>=0.9,<1",
+    "scipy>=1.11,<2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8,<9",
+]
+
+[project.scripts]
+fairness-poc = "fairness_poc.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
