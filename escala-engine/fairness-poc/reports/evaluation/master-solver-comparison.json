@@ -1,0 +1,456 @@
+{
+  "scenario": "scenario-1",
+  "seed": 20261104,
+  "pricing_workers": 1,
+  "columns": 8,
+  "coordinates": 300,
+  "total_residual_dimension": 160,
+  "matrix_coefficient_range": [
+    0.0,
+    1.0
+  ],
+  "total_target_range": [
+    0.125,
+    0.125
+  ],
+  "function_target_range": [
+    0.0625,
+    0.07142857142857142
+  ],
+  "primary_best_value": 0.189367616400278,
+  "column_generation_iterations": null,
+  "column_pool_source": "C:\\Users\\DEN CFAE\\OneDrive\\Documentos\\SD R. Sousa\\ABM\\escala-engine\\fairness-poc\\reports\\fairness-poc-results.json",
+  "primary_lock_bound": 0.189367626400278,
+  "total_design_singular_values": {
+    "rank": 8,
+    "dimension": 8,
+    "largest_singular_value": 4.858554442986513,
+    "smallest_nonzero_singular_value": 4.049005893368891,
+    "effective_condition_number": 1.1999376071404169
+  },
+  "role_design_singular_values": {
+    "rank": 8,
+    "dimension": 8,
+    "largest_singular_value": 4.828729107162194,
+    "smallest_nonzero_singular_value": 4.084528762249643,
+    "effective_condition_number": 1.1821998052237161
+  },
+  "primary": {
+    "CLARABEL": {
+      "status": "optimal",
+      "objective": 0.189367616400278,
+      "wall_time_seconds": 0.012560999999550404,
+      "solver_stats": {
+        "num_iters": 6,
+        "solve_time_seconds": 0.0006082,
+        "setup_time_seconds": null
+      },
+      "primal_feasible": true,
+      "primal_violation": 0.0,
+      "warm_start_used": false
+    },
+    "OSQP": {
+      "status": "optimal",
+      "objective": 0.18936761640027794,
+      "wall_time_seconds": 0.007730299999821,
+      "solver_stats": {
+        "num_iters": 75,
+        "solve_time_seconds": 0.0004039,
+        "setup_time_seconds": null
+      },
+      "primal_feasible": true,
+      "primal_violation": 0.0,
+      "warm_start_used": false
+    },
+    "SCS": {
+      "status": "optimal",
+      "objective": 0.1893676164002779,
+      "wall_time_seconds": 0.006054600002244115,
+      "solver_stats": {
+        "num_iters": 25,
+        "solve_time_seconds": 0.00012839999999999998,
+        "setup_time_seconds": 0.0002639
+      },
+      "primal_feasible": false,
+      "primal_violation": 2.171009139129154e-08,
+      "warm_start_used": false
+    }
+  },
+  "secondary": {
+    "CLARABEL-scaled-soc-warm": {
+      "status": "optimal",
+      "objective": 1.303111023148523,
+      "primary_value": 0.18936762640097504,
+      "primary_bound": 0.189367626400278,
+      "primary_constraint_scale": 0.43516390751104117,
+      "primary_constraint_dual": 569.6891032283811,
+      "primary_constraint_raw_dual": 215.76134652932004,
+      "wall_time_seconds": 0.017295699999522185,
+      "solver_stats": {
+        "num_iters": 21,
+        "solve_time_seconds": 0.0041934,
+        "setup_time_seconds": null
+      },
+      "primal_feasible": true,
+      "primal_violation": 6.970535260109045e-13,
+      "warm_start_used": true,
+      "normalized_primary_constraint": true
+    },
+    "CLARABEL-quadratic-lock-warm": {
+      "status": "optimal",
+      "objective": 1.3031110231963206,
+      "primary_value": 0.1893676264008911,
+      "primary_bound": 0.189367626400278,
+      "primary_constraint_scale": 0.43516390751104117,
+      "primary_constraint_dual": 569.533895307913,
+      "primary_constraint_raw_dual": 569.533895307913,
+      "wall_time_seconds": 0.016677999999956228,
+      "solver_stats": {
+        "num_iters": 21,
+        "solve_time_seconds": 0.0042158,
+        "setup_time_seconds": null
+      },
+      "primal_feasible": true,
+      "primal_violation": 6.131206653492427e-13,
+      "warm_start_used": true,
+      "normalized_primary_constraint": false
+    },
+    "SCS-scaled-soc-warm": {
+      "status": "optimal",
+      "objective": 1.3031112436050771,
+      "primary_value": 0.1893676260172686,
+      "primary_bound": 0.189367626400278,
+      "primary_constraint_scale": 0.43516390751104117,
+      "primary_constraint_dual": 580.2547215927814,
+      "primary_constraint_raw_dual": 219.7629184489153,
+      "wall_time_seconds": 0.3580827000005229,
+      "solver_stats": {
+        "num_iters": 26700,
+        "solve_time_seconds": 0.3488059,
+        "setup_time_seconds": 0.0005752
+      },
+      "primal_feasible": false,
+      "primal_violation": 1.6122158497111627e-08,
+      "warm_start_used": true,
+      "normalized_primary_constraint": true
+    },
+    "SCS-scaled-soc-cold": {
+      "status": "optimal",
+      "objective": 1.3031112436050771,
+      "primary_value": 0.1893676260172686,
+      "primary_bound": 0.189367626400278,
+      "primary_constraint_scale": 0.43516390751104117,
+      "primary_constraint_dual": 580.2547215927814,
+      "primary_constraint_raw_dual": 219.7629184489153,
+      "wall_time_seconds": 0.31441419999828213,
+      "solver_stats": {
+        "num_iters": 26700,
+        "solve_time_seconds": 0.3054388,
+        "setup_time_seconds": 0.0003746
+      },
+      "primal_feasible": false,
+      "primal_violation": 1.6122158497111627e-08,
+      "warm_start_used": false,
+      "normalized_primary_constraint": true
+    },
+    "OSQP-scaled-soc-warm": {
+      "status": "ERROR",
+      "error": "SolverError: The solver OSQP cannot solve this problem.",
+      "primary_bound": 0.189367626400278,
+      "normalized_primary_constraint": true,
+      "warm_start_used": true
+    }
+  },
+  "column_warm_start_policy": "Carry prior weights forward and append zero for every new column.",
+  "columns_shared_between_phases": true,
+  "solver_settings": {
+    "clarabel_tolerances": {
+      "tol_feas": 1e-09,
+      "tol_gap_abs": 1e-09,
+      "tol_gap_rel": 1e-09
+    },
+    "strict_primal_feasibility_tolerance": 1e-12,
+    "primary_lock_tolerance": 1e-08,
+    "secondary_lock_formulation": "Scaled SOC equivalent to squared total-objective bound.",
+    "inaccurate_status_certifies": false
+  },
+  "logs_file": "clarabel-master-logs.txt",
+  "repeat_count": 5,
+  "repeat_trials": [
+    {
+      "run": 1,
+      "primary": {
+        "CLARABEL": {
+          "status": "optimal",
+          "primal_feasible": true,
+          "primal_violation": 0.0,
+          "wall_time_seconds": 0.012560999999550404
+        },
+        "OSQP": {
+          "status": "optimal",
+          "primal_feasible": true,
+          "primal_violation": 0.0,
+          "wall_time_seconds": 0.007730299999821
+        },
+        "SCS": {
+          "status": "optimal",
+          "primal_feasible": false,
+          "primal_violation": 2.171009139129154e-08,
+          "wall_time_seconds": 0.006054600002244115
+        }
+      },
+      "secondary": {
+        "CLARABEL-scaled-soc-warm": {
+          "status": "optimal",
+          "primal_feasible": true,
+          "primal_violation": 6.970535260109045e-13,
+          "wall_time_seconds": 0.017295699999522185
+        },
+        "CLARABEL-quadratic-lock-warm": {
+          "status": "optimal",
+          "primal_feasible": true,
+          "primal_violation": 6.131206653492427e-13,
+          "wall_time_seconds": 0.016677999999956228
+        },
+        "SCS-scaled-soc-warm": {
+          "status": "optimal",
+          "primal_feasible": false,
+          "primal_violation": 1.6122158497111627e-08,
+          "wall_time_seconds": 0.3580827000005229
+        },
+        "SCS-scaled-soc-cold": {
+          "status": "optimal",
+          "primal_feasible": false,
+          "primal_violation": 1.6122158497111627e-08,
+          "wall_time_seconds": 0.31441419999828213
+        },
+        "OSQP-scaled-soc-warm": {
+          "status": "ERROR",
+          "primal_feasible": null,
+          "primal_violation": null,
+          "wall_time_seconds": null
+        }
+      }
+    },
+    {
+      "run": 2,
+      "primary": {
+        "CLARABEL": {
+          "status": "optimal",
+          "primal_feasible": true,
+          "primal_violation": 0.0,
+          "wall_time_seconds": 0.010780999997223262
+        },
+        "OSQP": {
+          "status": "optimal",
+          "primal_feasible": true,
+          "primal_violation": 0.0,
+          "wall_time_seconds": 0.0074267999989388045
+        },
+        "SCS": {
+          "status": "optimal",
+          "primal_feasible": false,
+          "primal_violation": 2.171009139129154e-08,
+          "wall_time_seconds": 0.005751400000008289
+        }
+      },
+      "secondary": {
+        "CLARABEL-scaled-soc-warm": {
+          "status": "optimal",
+          "primal_feasible": true,
+          "primal_violation": 6.970535260109045e-13,
+          "wall_time_seconds": 0.017336400000203867
+        },
+        "CLARABEL-quadratic-lock-warm": {
+          "status": "optimal",
+          "primal_feasible": true,
+          "primal_violation": 6.131206653492427e-13,
+          "wall_time_seconds": 0.01694159999897238
+        },
+        "SCS-scaled-soc-warm": {
+          "status": "optimal",
+          "primal_feasible": false,
+          "primal_violation": 1.6122158497111627e-08,
+          "wall_time_seconds": 0.31819000000177766
+        },
+        "SCS-scaled-soc-cold": {
+          "status": "optimal",
+          "primal_feasible": false,
+          "primal_violation": 1.6122158497111627e-08,
+          "wall_time_seconds": 0.3087679999989632
+        },
+        "OSQP-scaled-soc-warm": {
+          "status": "ERROR",
+          "primal_feasible": null,
+          "primal_violation": null,
+          "wall_time_seconds": null
+        }
+      }
+    },
+    {
+      "run": 3,
+      "primary": {
+        "CLARABEL": {
+          "status": "optimal",
+          "primal_feasible": true,
+          "primal_violation": 0.0,
+          "wall_time_seconds": 0.01002130000051693
+        },
+        "OSQP": {
+          "status": "optimal",
+          "primal_feasible": true,
+          "primal_violation": 0.0,
+          "wall_time_seconds": 0.00662930000180495
+        },
+        "SCS": {
+          "status": "optimal",
+          "primal_feasible": false,
+          "primal_violation": 2.171009139129154e-08,
+          "wall_time_seconds": 0.005706899999495363
+        }
+      },
+      "secondary": {
+        "CLARABEL-scaled-soc-warm": {
+          "status": "optimal",
+          "primal_feasible": true,
+          "primal_violation": 6.970535260109045e-13,
+          "wall_time_seconds": 0.016837799998029368
+        },
+        "CLARABEL-quadratic-lock-warm": {
+          "status": "optimal",
+          "primal_feasible": true,
+          "primal_violation": 6.131206653492427e-13,
+          "wall_time_seconds": 0.017150700001366204
+        },
+        "SCS-scaled-soc-warm": {
+          "status": "optimal",
+          "primal_feasible": false,
+          "primal_violation": 1.6122158497111627e-08,
+          "wall_time_seconds": 0.3174293000010948
+        },
+        "SCS-scaled-soc-cold": {
+          "status": "optimal",
+          "primal_feasible": false,
+          "primal_violation": 1.6122158497111627e-08,
+          "wall_time_seconds": 0.30771159999858355
+        },
+        "OSQP-scaled-soc-warm": {
+          "status": "ERROR",
+          "primal_feasible": null,
+          "primal_violation": null,
+          "wall_time_seconds": null
+        }
+      }
+    },
+    {
+      "run": 4,
+      "primary": {
+        "CLARABEL": {
+          "status": "optimal",
+          "primal_feasible": true,
+          "primal_violation": 0.0,
+          "wall_time_seconds": 0.012211600002046907
+        },
+        "OSQP": {
+          "status": "optimal",
+          "primal_feasible": true,
+          "primal_violation": 0.0,
+          "wall_time_seconds": 0.0070731000014347956
+        },
+        "SCS": {
+          "status": "optimal",
+          "primal_feasible": false,
+          "primal_violation": 2.171009139129154e-08,
+          "wall_time_seconds": 0.005570700002863305
+        }
+      },
+      "secondary": {
+        "CLARABEL-scaled-soc-warm": {
+          "status": "optimal",
+          "primal_feasible": true,
+          "primal_violation": 6.970535260109045e-13,
+          "wall_time_seconds": 0.016993400000501424
+        },
+        "CLARABEL-quadratic-lock-warm": {
+          "status": "optimal",
+          "primal_feasible": true,
+          "primal_violation": 6.131206653492427e-13,
+          "wall_time_seconds": 0.017305399996985216
+        },
+        "SCS-scaled-soc-warm": {
+          "status": "optimal",
+          "primal_feasible": false,
+          "primal_violation": 1.6122158497111627e-08,
+          "wall_time_seconds": 0.3115170000019134
+        },
+        "SCS-scaled-soc-cold": {
+          "status": "optimal",
+          "primal_feasible": false,
+          "primal_violation": 1.6122158497111627e-08,
+          "wall_time_seconds": 0.3083117999995011
+        },
+        "OSQP-scaled-soc-warm": {
+          "status": "ERROR",
+          "primal_feasible": null,
+          "primal_violation": null,
+          "wall_time_seconds": null
+        }
+      }
+    },
+    {
+      "run": 5,
+      "primary": {
+        "CLARABEL": {
+          "status": "optimal",
+          "primal_feasible": true,
+          "primal_violation": 0.0,
+          "wall_time_seconds": 0.014535099999193335
+        },
+        "OSQP": {
+          "status": "optimal",
+          "primal_feasible": true,
+          "primal_violation": 0.0,
+          "wall_time_seconds": 0.008094900000287453
+        },
+        "SCS": {
+          "status": "optimal",
+          "primal_feasible": false,
+          "primal_violation": 2.171009139129154e-08,
+          "wall_time_seconds": 0.007223599997814745
+        }
+      },
+      "secondary": {
+        "CLARABEL-scaled-soc-warm": {
+          "status": "optimal",
+          "primal_feasible": true,
+          "primal_violation": 6.970535260109045e-13,
+          "wall_time_seconds": 0.01916019999771379
+        },
+        "CLARABEL-quadratic-lock-warm": {
+          "status": "optimal",
+          "primal_feasible": true,
+          "primal_violation": 6.131206653492427e-13,
+          "wall_time_seconds": 0.018375499999820022
+        },
+        "SCS-scaled-soc-warm": {
+          "status": "optimal",
+          "primal_feasible": false,
+          "primal_violation": 1.6122158497111627e-08,
+          "wall_time_seconds": 0.3567884000003687
+        },
+        "SCS-scaled-soc-cold": {
+          "status": "optimal",
+          "primal_feasible": false,
+          "primal_violation": 1.6122158497111627e-08,
+          "wall_time_seconds": 0.31695810000019264
+        },
+        "OSQP-scaled-soc-warm": {
+          "status": "ERROR",
+          "primal_feasible": null,
+          "primal_violation": null,
+          "wall_time_seconds": null
+        }
+      }
+    }
+  ]
+}
